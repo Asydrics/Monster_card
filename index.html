@@ -261,6 +261,27 @@
         <p>&copy; 2024 Monstres WTF Vintage. Tous droits réservés.</p>
       </div>
     </footer>
-    <script></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      localStorage.setItem("monstres", JSON.stringify([{
+        id: Date.now(),
+        name: "Aqualizzard",
+        image: "images/aqualizzard.png",
+        type: "aquatique",
+        description: "lorem ipsum",
+        pv: "50",
+        attaque: "50",
+      }]));
+
+      console.table(JSON.parse(localStorage.getItem("monstres")));
+
+      Vue.createApp({
+        data() {
+          return {
+            monstres: JSON.parse(localStorage.getItem("monstres")) || [],
+          }
+        },
+      }).mount("#app");
+    </script>
   </body>
 </html>
