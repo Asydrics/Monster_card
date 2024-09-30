@@ -102,6 +102,7 @@
                 type="text"
                 class="w-full p-2 bg-gray-800 text-white rounded"
                 placeholder="Nom du monstre"
+                v-model="inputMonstre.name"
               />
             </div>
 
@@ -113,6 +114,7 @@
                   type="number"
                   class="w-full p-2 bg-gray-800 text-white rounded"
                   placeholder="PV"
+                  v-model="inputMonstre.pv"
                 />
               </div>
               <div>
@@ -121,6 +123,7 @@
                   type="number"
                   class="w-full p-2 bg-gray-800 text-white rounded"
                   placeholder="Attaque"
+                  v-model="inputMonstre.attaque"
                 />
               </div>
             </div>
@@ -130,12 +133,13 @@
               <textarea
                 class="w-full p-2 bg-gray-800 text-white rounded"
                 placeholder="Description du monstre"
+                v-model="inputMonstre.description"
               ></textarea>
             </div>
 
             <div>
               <label class="block mb-2">Type de Monstre</label>
-              <select class="w-full p-2 bg-gray-800 text-white rounded">
+              <select class="w-full p-2 bg-gray-800 text-white rounded" v-model="inputMonstre.type">
                 <option value="aquatique">Aquatique</option>
                 <option value="terrestre">Terrestre</option>
                 <option value="volant">Volant</option>
@@ -146,6 +150,7 @@
 
             <button
               class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              @click.prevent="addOneById()" v-if="!isEditing"
             >
               Ajouter Monstre
             </button>
@@ -226,10 +231,10 @@
           <!-- Carte de monstre -->
           <div
             class="monster-card bg-gray-700 rounded-lg shadow-lg p-6"
-            data-monster-type="aquatique"
+            :data-monster-type="monstre.type" 
           >
             <img
-              src="images/aqualizzard.png"
+              :src="monstre.image"
               class="w-full h-40 object-cover rounded mb-4"
             />
             <h3 class="text-xl font-bold">{{monstre.name}}</h3>
@@ -279,8 +284,24 @@
         data() {
           return {
             monstres: JSON.parse(localStorage.getItem("monstres")) || [],
+            inputMonstre: { id: null, name: "", image: "", type: "", description: "", pv: "", attaque: "" },
             isEditing: false,
-          }
+          };
+        },
+
+        methods: {
+          addOneById() {
+            // Atribué un id unique
+            this.inputMonstre.id = Date.now();
+            // Générer le chemin de l'image basé sur le nom du monstre
+            if (this.inputMonstre.name) {
+              this.inputMonstre.image = `images/${this.inputMonstre.name.toLowerCase()}.png`;
+            };
+            // Ajout du monstre au tableau des monstres
+            this.monstres.push({ ...this.inputMonstre });
+            // Réinitialiser inputMonstre après l'ajout
+            this.inputMonstre = { id: null, name: "", image: "", type: "", description: "", pv: "", attaque: "" };
+          },
         },
 
         watch: {
