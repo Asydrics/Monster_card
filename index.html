@@ -246,8 +246,8 @@
 
       <!-- Liste des monstres à droite -->
       <section class="w-2/3 p-6">
-        <h2 class="text-3xl monster-header mb-6">Monstres Actuels</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" v-for="monstre in monstres"
+        <h2 class="text-3xl monster-header mb-6">Monstres Actuels : {{monstresCount}}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" v-for="monstre in sortedMonsters"
           :class="{'slide-out': monstre.isDeleting}" :key="monstre.id">
           <!-- Carte de monstre -->
           <div
@@ -348,7 +348,6 @@
             this.inputMonstre = { ...this.monstres.find((item) => item.id == id) };
           },
 
-
           updateOneById(id) {
             // Localise l'index du monstre à modifier dans le tableau 'monstres'
             // 'findIndex' retourne l'index du premier monstre avec l'id donné.
@@ -363,6 +362,31 @@
             // Désactive le mode édition, donc 'isEditing' redevient 'false' pour revenir en mode ajout
             this.isEditing = false;
           },
+        },
+
+        computed:
+        {
+          monstresCount() {
+            return this.monstres.length;
+          },
+
+          sortedMonsters() {
+            return this.monstres.sort((a, b) => {
+              return a.name.localeCompare(b.name);
+            });
+          },
+
+          sortedMonsters() {
+            // Retourne une version triée du tableau 'monstres' basé sur les noms des monstres
+            return this.monstres.sort((a, b) => {
+
+              // Utilise la méthode 'localeCompare' pour comparer les noms des monstres
+              // 'localeCompare' compare les chaînes de caractères de manière sensible aux accents, majuscules/minuscules, etc.
+              // Cela permet de trier les noms par ordre alphabétique
+              return a.name.localeCompare(b.name);
+            });
+          },
+
         },
 
         watch: {
