@@ -71,6 +71,7 @@
         display: block;
       }
 
+      /* Animation de la supression */
       @keyframes slideOutRight {
         0% {
           transform: translateX(0);
@@ -104,12 +105,14 @@
           </div>
         </header>
         <div class="flex">
-          <button class="tab-button active">Ajouter un Monstre</button>
-          <button class="tab-button">Filtres</button>
+          <button :class="['tab-button', { 'active': isFiltersTabActive === false }]" @click.prevent="isFiltersTabActive = false">
+            Ajouter un Monstre</button>
+          <button :class="['tab-button', { 'active': isFiltersTabActive === true }]"
+            @click.prevent="isFiltersTabActive = true">Filtres</button>
         </div>
 
         <!-- Contenu des onglets -->
-        <div id="form" class="tab-content active">
+        <div id="form" class="tab-content active" v-if="isFiltersTabActive === false">
           <h2 class="text-3xl monster-header mb-6">Ajouter un Monstre</h2>
           <form class="grid grid-cols-1 gap-4">
             <div>
@@ -178,7 +181,7 @@
         </div>
 
         <!-- Contenu des filtres -->
-        <div id="filters" class="tab-content">
+        <div id="filters" :class="tab-content" v-if="isFiltersTabActive">
           <h2 class="text-3xl monster-header mb-6">Filtres</h2>
           <form class="grid grid-cols-1 gap-4">
             <div>
@@ -247,12 +250,12 @@
       <!-- Liste des monstres à droite -->
       <section class="w-2/3 p-6">
         <h2 class="text-3xl monster-header mb-6">Monstres Actuels : {{monstresCount}}</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" v-for="monstre in sortedMonsters"
-          :class="{'slide-out': monstre.isDeleting}" :key="monstre.id">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-8 border-solid">
           <!-- Carte de monstre -->
           <div
             class="monster-card bg-gray-700 rounded-lg shadow-lg p-6"
-            :data-monster-type="monstre.type" 
+            :data-monster-type="monstre.type"  v-for="monstre in sortedMonsters"
+            :class="{'slide-out': monstre.isDeleting}" :key="monstre.id"
           >
             <img
               :src="monstre.image"
@@ -308,6 +311,7 @@
             monstres: JSON.parse(localStorage.getItem("monstres")) || [],
             inputMonstre: { id: null, name: "", image: "", type: "", description: "", pv: "", attaque: "" },
             isEditing: false,
+            isFiltersTabActive: false,
           };
         },
 
@@ -371,15 +375,8 @@
           },
 
           sortedMonsters() {
-            return this.monstres.sort((a, b) => {
-              return a.name.localeCompare(b.name);
-            });
-          },
-
-          sortedMonsters() {
             // Retourne une version triée du tableau 'monstres' basé sur les noms des monstres
             return this.monstres.sort((a, b) => {
-
               // Utilise la méthode 'localeCompare' pour comparer les noms des monstres
               // 'localeCompare' compare les chaînes de caractères de manière sensible aux accents, majuscules/minuscules, etc.
               // Cela permet de trier les noms par ordre alphabétique
