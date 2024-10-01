@@ -70,6 +70,22 @@
       .tab-content.active {
         display: block;
       }
+
+      @keyframes slideOutRight {
+        0% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+
+      .slide-out {
+        animation: slideOutRight 0.5s forwards; /* Animation de 0.5s, "forwards" pour garder l'état final */
+      }
+      
     </style>
   </head>
   <body class="bg-gray-800 text-white font-sans" id="app">
@@ -227,7 +243,8 @@
       <!-- Liste des monstres à droite -->
       <section class="w-2/3 p-6">
         <h2 class="text-3xl monster-header mb-6">Monstres Actuels</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" v-for="monstre in monstres" :key="monstre.id">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" v-for="monstre in monstres"
+          :class="{'slide-out': monstre.isDeleting}" :key="monstre.id">
           <!-- Carte de monstre -->
           <div
             class="monster-card bg-gray-700 rounded-lg shadow-lg p-6"
@@ -250,7 +267,7 @@
                 Modifier
               </button>
               <button
-                class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-full"
+                class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-full" @click.prevent="deleteOneById(monstre.id)"
               >
                 Supprimer
               </button>
@@ -301,6 +318,19 @@
             this.monstres.push({ ...this.inputMonstre });
             // Réinitialiser inputMonstre après l'ajout
             this.inputMonstre = { id: null, name: "", image: "", type: "", description: "", pv: "", attaque: "" };
+          },
+
+          deleteOneById(id) {
+            // Trouver l'index du monstre à supprimer
+            const index = this.monstres.findIndex((item) => item.id == id);
+            if (index !== -1) {
+              // Ajouter une propriété 'isDeleting' pour déclencher l'animation
+              this.monstres[index].isDeleting = true;
+              // Supprimer l'élément après l'animation (500 ms)
+              setTimeout(() => {
+                this.monstres.splice(index, 1);
+              }, 500); // 500ms correspond à la durée de l'animation CSS
+            }
           },
         },
 
