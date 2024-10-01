@@ -46,13 +46,13 @@ Objectif : Trier les monstres par ordre alphabétique avant de les afficher.
 Computed : sortedMonsters()
 Détails : Trier la liste des monstres par nom avant de les afficher à l’utilisateur. Utiliser une propriété calculée pour garantir que le tri est toujours actif.
 
-5. Affichage et gestion de l'onglet "Filtres"
+9. Affichage et gestion de l'onglet "Filtres"
 Nom de l’issue : Implémentation de l'affichage de l'onglet "Filtres"
 Nom du commit : feat: implement filters tab display
 Objectif : Implémenter la fonctionnalité de l'onglet "Filtres", permettant à l’utilisateur de basculer entre l’ajout de monstres et les filtres.
 Détails : Utiliser une propriété isFiltersTabActive pour afficher ou masquer l'onglet correspondant via des directives conditionnelles (utiliser les classes css déjà présentes pour l'onglet ajout).
 
-9. Recherche et filtrage des monstres par nom ou type
+10. Recherche et filtrage des monstres par nom ou type
 Nom de l’issue : Recherche et filtrage des monstres
 Nom du commit : feat: implement search and filter functionality for monsters
 Objectif : Filtrer les monstres affichés en fonction de la recherche par nom ou type.

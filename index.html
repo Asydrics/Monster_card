@@ -170,6 +170,10 @@
             >
               Ajouter Monstre
             </button>
+            <button class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              @click.prevent="updateOneById(inputMonstre.id)" v-else>
+              Modifier Monstre
+            </button>
           </form>
         </div>
 
@@ -263,6 +267,7 @@
             <div class="text-right">
               <button
                 class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-full"
+                @click.prevent="editOneById(monstre.id)"
               >
                 Modifier
               </button>
@@ -331,6 +336,32 @@
                 this.monstres.splice(index, 1);
               }, 500); // 500ms correspond à la durée de l'animation CSS
             }
+          },
+
+          editOneById(id) {
+            // Active le mode édition (change l'état de 'isEditing' à true)
+            this.isEditing = true;
+            // Recherche dans le tableau 'monstres' l'élément ayant l'id correspondant.
+            // 'find' retourne le premier monstre trouvé avec l'id donné.
+            // Utilisation de l'opérateur de décomposition '...' pour créer une copie des propriétés du monstre trouvé
+            // et assigner cette copie à 'inputMonstre' afin de permettre l'édition des données dans le formulaire.
+            this.inputMonstre = { ...this.monstres.find((item) => item.id == id) };
+          },
+
+
+          updateOneById(id) {
+            // Localise l'index du monstre à modifier dans le tableau 'monstres'
+            // 'findIndex' retourne l'index du premier monstre avec l'id donné.
+            // Ensuite, 'splice' remplace cet élément par une nouvelle version (celle de 'inputMonstre')
+            this.monstres.splice(
+              this.monstres.findIndex((item) => item.id == id),
+              1, // Supprime 1 élément à l'index trouvé
+              { ...this.inputMonstre } // Ajoute à cet index la copie mise à jour de 'inputMonstre'
+            );
+            // Réinitialise 'inputMonstre' après la mise à jour pour que le formulaire soit vide
+            this.inputMonstre = { id: null, name: "", image: "", type: "", description: "", pv: "", attaque: "" };
+            // Désactive le mode édition, donc 'isEditing' redevient 'false' pour revenir en mode ajout
+            this.isEditing = false;
           },
         },
 
